@@ -6,6 +6,21 @@ export class App {
   initializeApp() {
     let self = this;
 
+    const userNameCondition = "[a-z0-9-_]";
+    const reg = new RegExp(userNameCondition);
+
+    const checkUserNameFieldCorrectness = (reg, userName) => reg.test(userName);
+
+    const removeInputUserNameError = userNameInput => {
+      userNameInput.removeClass("is-danger");
+      userNameInput.off("input", () => removeInputUserNameError(userNameInput));
+    };
+
+    const setInputUserNameError = userNameInput => {
+      userNameInput.addClass("is-danger");
+      userNameInput.on("input", () => removeInputUserNameError(userNameInput));
+    };
+
     var URL = 'https://api.github.com/users/';
 
     const getData = userName => {
@@ -29,10 +44,14 @@ export class App {
 
     $('.load-username').on('click', function () {
       let userName = $('.username.input').val();
+      const userNameInput = $('.username.input');
 
-      var isIE = /*@cc_on!@*/false || !!document.documentMode;
-      if(!isIE) getData(userName);
-      else getDataForIE(userName);
+      const checkFieldResult = checkUserNameFieldCorrectness(reg, userName);
+      if(checkFieldResult){
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+        if(!isIE) getData(userName);
+        else getDataForIE(userName);
+      } else setInputUserNameError(userNameInput);
     })
   }
 
