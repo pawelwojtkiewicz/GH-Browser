@@ -6,18 +6,34 @@ export class App {
   initializeApp() {
     let self = this;
 
-    $('.load-username').on('click', function (e) {
+    var URL = 'https://api.github.com/users/';
+
+    const getData = userName => {
+      fetch(URL + userName)
+      .then((response)=> response.json())
+      .then(function (body) {
+        self.profile = body;
+        self.update_profile();
+      })
+    }
+
+    function getDataForIE(userName){
+      const xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", function() {
+            self.profile = JSON.parse(xhr.response);
+            self.update_profile();
+      });
+      xhr.open("GET", URL + userName, true);
+      xhr.send();   
+    }
+
+    $('.load-username').on('click', function () {
       let userName = $('.username.input').val();
 
-      fetch('https://api.github.com/users/' + userName)
-        .then((response)=> {response.json})
-        .then(function (body) {
-          self.profile = body;
-          self.update_profile();
-        })
-
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
+      if(!isIE) getData(userName);
+      else getDataForIE(userName);
     })
-
   }
 
   update_profile() {
