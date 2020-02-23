@@ -5,8 +5,6 @@ export default class UserProfileModal {
         $('#spinner').toggleClass("is-hidden");
     }
 
-
-
     getUserData(userName){
         const URLuserInformations = `https://api.github.com/users/${userName}`;
         const URLuserHistory = `https://api.github.com/users/${userName}/events/public`;
@@ -26,6 +24,7 @@ export default class UserProfileModal {
                     .then(response => response.json())
                     .then(function (body) {
                         userHistory = body;
+                        console.log(userInformations, userHistory);
                 });
             }
     
@@ -34,8 +33,11 @@ export default class UserProfileModal {
                     .then(response => response.json())
                     .then(function (body) {
                         userInformations = body;
+                        getUserHistory();
                 });
             }
+
+            getUserInformations();
         }
     
         function getDataByXMLHttpRequest(userName){
