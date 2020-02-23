@@ -24,6 +24,7 @@ export default class UserProfileModal {
                     .then(response => response.json())
                     .then(function (body) {
                         userHistory = body;
+                        this.fetchDataLoader();
                         console.log(userInformations, userHistory);
                 });
             }
@@ -48,6 +49,7 @@ export default class UserProfileModal {
                 const xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", function() {
                     userHistory = JSON.parse(xhr.response);
+                    this.fetchDataLoader();
                 });
                 xhr.open("GET", URLuserInformations, true);
                 xhr.send();
