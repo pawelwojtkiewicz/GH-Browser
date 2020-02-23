@@ -1,8 +1,9 @@
 import $ from 'cash-dom';
 
 export default class UserProfileModal {
-    fetchDataLoader(){
-        $('#spinner').toggleClass("is-hidden");
+    fetchDataLoader(status){
+        if(status) $('#spinner').removeClass("is-hidden");
+        else $('#spinner').addClass("is-hidden");
     }
 
     getUserData(userName){
@@ -15,7 +16,8 @@ export default class UserProfileModal {
             } else return true;
         }
     
-        function getDataByFetch(userName){
+        function getDataByFetch(){
+            const that = this;
             let userInformations;
             let userHistory;
     
@@ -24,7 +26,7 @@ export default class UserProfileModal {
                     .then(response => response.json())
                     .then(function (body) {
                         userHistory = body;
-                        this.fetchDataLoader();
+                        that.fetchDataLoader(false);
                         console.log(userInformations, userHistory);
                 });
             }
@@ -41,7 +43,7 @@ export default class UserProfileModal {
             getUserInformations();
         }
     
-        function getDataByXMLHttpRequest(userName){
+        function getDataByXMLHttpRequest(){
             let userInformations;
             let userHistory;
     
@@ -49,7 +51,7 @@ export default class UserProfileModal {
                 const xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", function() {
                     userHistory = JSON.parse(xhr.response);
-                    this.fetchDataLoader();
+                    that.fetchDataLoader(false);
                 });
                 xhr.open("GET", URLuserInformations, true);
                 xhr.send();
@@ -67,8 +69,8 @@ export default class UserProfileModal {
     
             getUserInformations();
         }
-    
+
         const isFetchAvaible = checkIfFetchIsAvaible();
-        isFetchAvaible ? getDataByFetch(userName) : getDataByXMLHttpRequest(userName);
+        isFetchAvaible ? getDataByFetch.call(this) : getDataByXMLHttpRequest(userName);
     }
 }
