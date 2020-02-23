@@ -1,5 +1,9 @@
-export default class UserProfileModal {
+import $ from 'cash-dom';
 
+export default class UserProfileModal {
+    fetchDataLoader(){
+        $('#spinner').toggleClass("is-hidden");
+    }
 
 
 
@@ -21,7 +25,7 @@ export default class UserProfileModal {
                 fetch(URLuserInformations)
                     .then(response => response.json())
                     .then(function (body) {
-                        userInformatins = body;
+                        userHistory = body;
                 });
             }
     
@@ -29,7 +33,7 @@ export default class UserProfileModal {
                 fetch(URLuserHistory)
                     .then(response => response.json())
                     .then(function (body) {
-                        userHistory = body;
+                        userInformations = body;
                 });
             }
         }

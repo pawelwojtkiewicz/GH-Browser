@@ -8,6 +8,7 @@ export default class UserProfile {
     }
 
     render(userName){
+        this.modal.fetchDataLoader();
         this.modal.getUserData(userName);
         //this.activateLoader();
         //this.getUserInfo
