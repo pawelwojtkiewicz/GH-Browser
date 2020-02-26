@@ -1,13 +1,13 @@
 import createElement from '../../utilities/createElement.js'
 
 export default class UserProfileView {
-    // renderUserProfileInormations(){
-    //     function createProfile(){
+    renderUserProfileInormations({login, avatar_url, html_url, bio}){
+        function createProfile(){
 
-    //     }
+        }
 
-    //     function create
-    // }
+        function create
+    }
 
     // renderUserProfileTimeline(){
 
