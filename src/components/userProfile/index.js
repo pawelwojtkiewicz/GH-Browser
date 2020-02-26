@@ -15,10 +15,13 @@ export default class UserProfile {
         ];
         Promise.all(requests)
             .then(data => {
-                const userInformations = data.find(element => element.dataType === "userInformations");
-                console.log(userInformations)
-                this.modal.fetchDataLoader(false);
-                
+                const userInformations = data.filter(function (element) {
+                    return element.dataType === "userInformations"
+                })[0];
+           
+
+                this.view.renderUserProfileInormations(userInformations);
+                this.modal.fetchDataLoader(false);  
             });
     }
 }
