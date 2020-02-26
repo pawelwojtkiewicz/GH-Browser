@@ -1,8 +1,9 @@
 import './assets/scss/app.scss';
 import $ from 'cash-dom';
+import 'promise-polyfill/src/polyfill';
+import 'whatwg-fetch'
 import UserProfile from './components/userProfile';
 import checkUserNameFieldCorrectness from './utilities/checkUserNameFieldCorrectness.js';
-
 
 export class App {
   initializeApp() {
@@ -16,7 +17,6 @@ export class App {
       const isUserNameCorrect = checkUserNameFieldCorrectness(userName, userNameInput);
       if(isUserNameCorrect) userProfile.render(userName);
     })
-
   }
 
   update_profile() {

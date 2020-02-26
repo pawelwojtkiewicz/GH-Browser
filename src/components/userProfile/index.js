@@ -9,8 +9,14 @@ export default class UserProfile {
 
     render(userName){
         this.modal.fetchDataLoader(true);
-        this.modal.getUserData(userName);
-        //this.activateLoader();
-        //this.getUserInfo
+        const requests = [
+            this.modal.getUserInformations(userName),
+            this.modal.getUserHistory(userName)
+        ];
+        Promise.all(requests)
+            .then(data => {
+                this.modal.fetchDataLoader(false);
+                
+            });
     }
 }
