@@ -10,6 +10,7 @@ export default class UserProfile {
 
     render(userName){
         this.modal.fetchDataLoader(true);
+        this.modal.removeOldUserInformationsAndHistory();
         const requests = [
             this.modal.getUserInformations(userName),
             this.modal.getUserHistory(userName, this.userHistoryEventTypes)

@@ -8,6 +8,11 @@ export default class UserProfileModal {
         else $('#spinner').addClass("is-hidden");
     }
 
+    removeOldUserInformationsAndHistory() {
+        $('#user-timeline').empty();
+        $('.profile').empty();
+    }
+
     getUserInformations(userName){
         return fetchUserInformations(userName);
     }
