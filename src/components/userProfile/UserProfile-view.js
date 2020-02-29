@@ -45,7 +45,100 @@ export default class UserProfileView {
         $('.profile').replaceWith(createProfileContainer);
     }
 
-    // renderUserProfileTimeline(){
+    renderUserProfileTimeline(userHistory){
+        const createHistoryElementContainer = (children, created_at) => {
+            const container = document.createElement("div");
+            container.className = "timeline-item";
+            container.innerHTML = `
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                    <p class="heading">${created_at}</p>
+                        ${children}
+                    </div>
+            `;
+            return container;
+        };
 
-    // }
+        const createPullRequestEvent = elementData => {
+            const {payload, created_at} = elementData.userEvent;
+            const createContent = () => (`
+                <div class="content">
+                    <span class="gh-username">
+                        <img src="${payload.pull_request.user.avatar_url}"/>
+                        <a href="${payload.pull_request.user.html_url}">
+                            ${payload.pull_request.user.login}
+                        </a>
+                        </span>
+                    ${payload.action}
+                    <a href="${payload.pull_request.html_url}">
+                        pull request
+                    </a>
+                    <p class="repo-name">
+                        <a href="${payload.pull_request.base.repo.html_url}">
+                            ${payload.pull_request.base.repo.full_name}
+                        </a>
+                    </p>
+                </div>
+            `);
+  
+            const elementContent = createContent();
+            const elementContainer = createHistoryElementContainer(elementContent, created_at);
+
+            return elementContainer;
+        }
+
+        const createPullRequestReviewCommentEvent = elementData => {
+            const {payload, created_at} = elementData.userEvent;
+            const createContent = () => (`
+                <div class="content">
+                    <span class="gh-username">
+                        <img src="${payload.pull_request.user.avatar_url}"/>
+                        <a href="${payload.pull_request.user.html_url}">
+                            ${payload.pull_request.user.login}
+                        </a>
+                    </span>
+                    created
+                    <a href="${payload.comment.html_url}">
+                        comment
+                    </a>
+                    to
+                    <a href="${payload.pull_request.html_url}">
+                        pull request
+                    </a>
+                    <p class="repo-name">
+                        <a href="${payload.pull_request.base.repo.html_url}">
+                            ${payload.pull_request.base.repo.full_name}
+                        </a>
+                    </p>
+                </div>
+            `);
+
+            const elementContent = createContent();
+            const elementContainer = createHistoryElementContainer(elementContent, created_at);
+
+            return elementContainer;
+        }
+
+        const createHistoryElements = userHistory => {
+            console.log(userHistory);
+            const container = document.createElement("div");
+            container.className = "timeline";
+            container.id="user-timeline";
+
+            const PullRequestEvent = "PullRequestEvent";
+            const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
+            userHistory.body.forEach(elementData => {
+                switch(elementData.type){
+                    case PullRequestEvent: return container.appendChild(createPullRequestEvent(elementData));
+                    case PullRequestReviewCommentEvent: return container.appendChild(createPullRequestReviewCommentEvent(elementData));
+                    default: return console.log("error");
+                }
+            });
+
+            return container;
+        }
+        
+        const elementsToCreate = createHistoryElements(userHistory);
+        $('#user-timeline').replaceWith(elementsToCreate);
+    }
 }

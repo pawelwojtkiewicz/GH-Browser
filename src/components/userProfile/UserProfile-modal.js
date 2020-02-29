@@ -12,7 +12,32 @@ export default class UserProfileModal {
         return fetchUserInformations(userName);
     }
 
-    getUserHistory(userName){
-        return fetchUserHistory(userName);
+    getUserHistory(userName, userHistoryEventTypes){
+        const filterPullRequestEventbyActionType = response => {
+            const pullRequestEvent = "PullRequestEvent";
+            const actionTypesOfPullRequestEvent = ["opened", "closed"];
+
+            const checkIfPullRequestEvent = (elementData, pullRequestEvent) => elementData.type === pullRequestEvent;
+            const getWithRequiredActionTypes = (elementData, actionTypesOfPullRequestEvent) => actionTypesOfPullRequestEvent.some(actionType => actionType === elementData.userEvent.payload.action);
+
+            const filteredUserHistory = response.map(elementData => {
+                const isPullRequestEvent = checkIfPullRequestEvent(elementData, pullRequestEvent);
+                if(isPullRequestEvent){
+                    const result = getWithRequiredActionTypes(elementData, actionTypesOfPullRequestEvent);
+                    if(result) return elementData;
+                } else {
+                    return elementData;
+                }
+            });
+        
+            return filteredUserHistory;
+        }
+
+        return fetchUserHistory(userName, userHistoryEventTypes).then(response => {
+            const { body } = response;
+            const filteredUserHistory = filterPullRequestEventbyActionType(body);
+            
+            return {...response, body: filteredUserHistory};
+        });
     }
 }
