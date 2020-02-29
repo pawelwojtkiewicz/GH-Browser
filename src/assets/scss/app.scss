@@ -6,6 +6,12 @@
   margin-bottom: 8px;
 }
 
+.profile-container{
+  @include until($desktop + 193px) {
+    width: 50%;
+  }
+}
+
 .gh-username img{
   width: 32px;
 }
