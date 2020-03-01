@@ -18,6 +18,22 @@ export default class UserProfileModal {
     }
 
     getUserHistory(userName, userHistoryEventTypes){
+        const extractUserEventTypes = (userEventHistory, userHistoryEventTypes) => {
+            const userHistory = [];
+            userHistoryEventTypes.forEach(eventType => {
+                userEventHistory.forEach(userEvent => {
+                    if(userEvent.type === eventType){
+                        const historyElement = {
+                            type: eventType,
+                            userEvent,
+                        }
+                        userHistory.push(historyElement);
+                    }
+                });
+            });
+            return userHistory;
+        }
+
         const filterPullRequestEventbyActionType = response => {
             const pullRequestEvent = "PullRequestEvent";
             const actionTypesOfPullRequestEvent = ["opened", "closed"];
@@ -38,11 +54,21 @@ export default class UserProfileModal {
             return filteredUserHistory;
         }
 
+        const filterData = (body, userHistoryEventTypes) => {
+            const extractedByUserType = extractUserEventTypes(body, userHistoryEventTypes)
+            const filteredByActionType = filterPullRequestEventbyActionType(extractedByUserType)
+
+            return filteredByActionType;
+        }
+
         return fetchUserHistory(userName, userHistoryEventTypes).then(response => {
             const { body } = response;
-            const filteredUserHistory = filterPullRequestEventbyActionType(body);
-            
-            return {...response, body: filteredUserHistory};
+            if(body.status === "error"){
+                return {...response, body};
+            } else {
+                const filteredData = filterData(body, userHistoryEventTypes);
+                return {...response, body: filteredData};
+            }
         });
     }
 }

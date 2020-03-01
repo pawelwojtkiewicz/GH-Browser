@@ -2,6 +2,8 @@ import $ from 'cash-dom';
 
 export default class UserProfileView {
     renderUserProfileInormations(userInformations){
+        const {body} = userInformations;
+        const checkStatus = status => status === "error";
         const createUserProfileInormationsContainer = children => {
             const container = document.createElement("div");
             container.className = "profile";
@@ -39,12 +41,26 @@ export default class UserProfileView {
             `);
         }
 
-        const elementContent = createContent(userInformations.body);
+        const createErrorInformation = textResponse => (`
+            <p>${textResponse}</p>
+        `);
+
+        let elementContent;
+        const isError = checkStatus(body.status);
+
+        if(isError){
+            elementContent = createErrorInformation(body.textResponse);
+        } else {
+            elementContent = createContent(body);
+        }
+
         const elementContainer = createUserProfileInormationsContainer(elementContent);
         $('.profile').replaceWith(elementContainer);
     }
 
     renderUserProfileTimeline(userHistory){
+        const {body} = userHistory;
+        const checkStatus = status => status === "error";
         const createHistoryElementContainer = (children, created_at) => {
             const container = document.createElement("div");
             container.className = "timeline-item";
@@ -118,14 +134,14 @@ export default class UserProfileView {
             return elementContainer;
         }
 
-        const createHistoryElements = userHistory => {
-            const checkIfIsHistory = userHistory => userHistory.body.length !== 0 ? true : false;
-            const createHistory = userHistory => {
+        const createHistoryElements = body => {
+            const checkIfIsHistory = body => body.length !== 0 ? true : false;
+            const createHistory = body => {
                 const PullRequestEvent = "PullRequestEvent";
                 const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
 
                 const fragment = document.createDocumentFragment();
-                userHistory.body.forEach(elementData => {
+                body.forEach(elementData => {
                     switch(elementData.type){
                         case PullRequestEvent: return fragment.appendChild(createPullRequestEvent(elementData));
                         case PullRequestReviewCommentEvent: return fragment.appendChild(createPullRequestReviewCommentEvent(elementData));
@@ -140,18 +156,32 @@ export default class UserProfileView {
                 return container;
             }
             
+            const createErrorInformation = textResponse => {
+                const container = document.createElement('p');
+                container.innerText = textResponse;
+                return container;
+            }
+
             const container = document.createElement("div");
             container.className = "timeline";
             container.id="user-timeline";
 
-            const isHistory = checkIfIsHistory(userHistory);
-            const elementContainer = isHistory ? createHistory(userHistory) : createNoHistoryInformation();
-            container.appendChild(elementContainer);
-
+            const isError = checkStatus(body.status);
+            const isHistory = checkIfIsHistory(body);
+            let elementContent;
+            if(isError){
+                elementContent = createErrorInformation(body.textResponse);
+            } else if (isHistory) {
+                elementContent = createHistory(body)
+            } else if (!isHistory){
+                elementContent = createNoHistoryInformation()
+            }
+            
+            container.appendChild(elementContent);
             return container;
         }
-        
-        const elementsToCreate = createHistoryElements(userHistory);
+
+        const elementsToCreate = createHistoryElements(body);
         $('#user-timeline').replaceWith(elementsToCreate);
     }
 }
