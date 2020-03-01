@@ -119,20 +119,34 @@ export default class UserProfileView {
         }
 
         const createHistoryElements = userHistory => {
-            console.log(userHistory);
+            const checkIfIsHistory = userHistory => userHistory.body.length !== 0 ? true : false;
+            const createHistory = userHistory => {
+                const PullRequestEvent = "PullRequestEvent";
+                const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
+
+                const fragment = document.createDocumentFragment();
+                userHistory.body.forEach(elementData => {
+                    switch(elementData.type){
+                        case PullRequestEvent: return fragment.appendChild(createPullRequestEvent(elementData));
+                        case PullRequestReviewCommentEvent: return fragment.appendChild(createPullRequestReviewCommentEvent(elementData));
+                        default: return console.log("error");
+                    }
+                });
+                return fragment;
+            }
+            const createNoHistoryInformation = () => {
+                const container = document.createElement("p");
+                container.innerText = "No history";
+                return container;
+            }
+            
             const container = document.createElement("div");
             container.className = "timeline";
             container.id="user-timeline";
 
-            const PullRequestEvent = "PullRequestEvent";
-            const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
-            userHistory.body.forEach(elementData => {
-                switch(elementData.type){
-                    case PullRequestEvent: return container.appendChild(createPullRequestEvent(elementData));
-                    case PullRequestReviewCommentEvent: return container.appendChild(createPullRequestReviewCommentEvent(elementData));
-                    default: return console.log("error");
-                }
-            });
+            const isHistory = checkIfIsHistory(userHistory);
+            const elementContainer = isHistory ? createHistory(userHistory) : createNoHistoryInformation();
+            container.appendChild(elementContainer);
 
             return container;
         }
