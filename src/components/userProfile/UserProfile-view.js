@@ -31,7 +31,7 @@ export default class UserProfileView {
                     </div>
                         <div class="content" id="profile-bio">
                             <p>
-                               ${bio}
+                               ${bio || "(no information)"}
                             </p>
                         </div>
                     </div>
