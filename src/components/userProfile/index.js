@@ -8,7 +8,7 @@ export default class UserProfile {
         this.userHistoryEventTypes = ["PullRequestEvent", "PullRequestReviewCommentEvent"];
     }
 
-    render(userName){
+    render = userName => {
         this.modal.fetchDataLoader(true);
         this.modal.removeOldUserInformationsAndHistory();
         const requests = [

@@ -1,4 +1,4 @@
-export default function fetchUserHistory(userName, userHistoryEventTypes){
+export default fetchUserHistory = userName => {
     return fetch(`https://api.github.com/users/${userName}/events/public`)
         .then(response => {
             if (response.status === 200) {

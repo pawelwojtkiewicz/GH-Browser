@@ -1,7 +1,7 @@
 import $ from 'cash-dom';
 
 export default class UserProfileView {
-    renderUserProfileInormations(userInformations){
+    renderUserProfileInormations = userInformations => {
         const {body} = userInformations;
         const checkStatus = status => status === "error";
         const createUserProfileInormationsContainer = children => {
@@ -58,7 +58,7 @@ export default class UserProfileView {
         $('.profile').replaceWith(elementContainer);
     }
 
-    renderUserProfileTimeline(userHistory){
+    renderUserProfileTimeline = (userHistory) => {
         const {body} = userHistory;
         const checkStatus = status => status === "error";
         const createHistoryElementContainer = (children, created_at) => {

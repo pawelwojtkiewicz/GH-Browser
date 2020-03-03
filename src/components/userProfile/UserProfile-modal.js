@@ -3,21 +3,19 @@ import fetchUserInformations from '../../services/fetchUserInformations.js';
 import fetchUserHistory from '../../services/fetchUserHistory.js';
 
 export default class UserProfileModal {
-    fetchDataLoader(status){
+    fetchDataLoader = status => {
         if(status) $('#spinner').removeClass("is-hidden");
         else $('#spinner').addClass("is-hidden");
     }
 
-    removeOldUserInformationsAndHistory() {
+    removeOldUserInformationsAndHistory = () => {
         $('#user-timeline').empty();
         $('.profile').empty();
     }
 
-    getUserInformations(userName){
-        return fetchUserInformations(userName);
-    }
+    getUserInformations = userName => fetchUserInformations(userName);
 
-    getUserHistory(userName, userHistoryEventTypes){
+    getUserHistory = (userName, userHistoryEventTypes) => {
         const extractUserEventTypes = (userEventHistory, userHistoryEventTypes) => {
             const userHistory = [];
             userHistoryEventTypes.forEach(eventType => {
