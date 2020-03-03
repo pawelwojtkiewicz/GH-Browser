@@ -1,5 +1,5 @@
-import UserProfileModal from './UserProfile-modal.js';
-import UserProfileView from './UserProfile-view.js';
+import UserProfileModal from './UserProfileModal.js';
+import UserProfileView from './UserProfileMiew.js';
 
 export default class UserProfile {
     constructor(){
