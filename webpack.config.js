@@ -43,15 +43,9 @@ const config = {
         use: extractPlugin.extract({
           use: [
             {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true
-              }
+              loader: 'css-loader'
             }, {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
-              }
+              loader: 'sass-loader'
             }
           ],
           fallback: 'style-loader'
