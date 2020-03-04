@@ -24,8 +24,11 @@ export default class UserProfile {
                 const userHistory= data.filter(function (element) {
                     return element.dataType === "userHistory"
                 })[0];
+
+                const convertPullRequestDate = this.modal.convertPullRequestDate;
+
                 this.view.renderUserProfileInormations(userInformations);
-                this.view.renderUserProfileTimeline(userHistory);
+                this.view.renderUserProfileTimeline(userHistory, convertPullRequestDate);
                 this.modal.fetchDataLoader(false);  
             });
     }
