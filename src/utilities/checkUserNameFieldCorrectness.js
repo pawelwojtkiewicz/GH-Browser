@@ -1,6 +1,6 @@
 import '../assets/scss/app.scss';
 
-export default checkUserNameFieldCorrectness = (userName, userNameInput) => {
+export default function checkUserNameFieldCorrectness(userName, userNameInput){
     const userNameCondition = "[a-z0-9-_]+$";
     const reg = new RegExp(userNameCondition);
 

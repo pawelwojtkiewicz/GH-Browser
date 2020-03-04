@@ -6,7 +6,7 @@ import UserProfile from './components/userProfile';
 import checkUserNameFieldCorrectness from './utilities/checkUserNameFieldCorrectness.js';
 
 export class App {
-  initializeApp = () => {
+  initializeApp(){
     const userProfile = new UserProfile();
 
     $('.load-username').on('click', function () {

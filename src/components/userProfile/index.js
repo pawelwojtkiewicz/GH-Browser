@@ -1,5 +1,5 @@
 import UserProfileModal from './UserProfileModal.js';
-import UserProfileView from './UserProfileMiew.js';
+import UserProfileView from './UserProfileView.js';
 
 export default class UserProfile {
     constructor(){
@@ -8,7 +8,7 @@ export default class UserProfile {
         this.userHistoryEventTypes = ["PullRequestEvent", "PullRequestReviewCommentEvent"];
     }
 
-    render = userName => {
+    render(userName){
         this.modal.fetchDataLoader(true);
         this.modal.removeOldUserInformationsAndHistory();
         const requests = [
