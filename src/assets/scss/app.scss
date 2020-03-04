@@ -1,4 +1,13 @@
-@import "~bulma";
+@import '~bulma/sass/utilities/all';
+@import '~bulma/sass/base/all';
+@import '~bulma/sass/components/navbar';
+@import '~bulma/sass/elements/container';
+@import '~bulma/sass/grid/columns';
+@import '~bulma/sass/elements/button';
+@import '~bulma/sass/elements/image';
+@import '~bulma/sass/elements/title';
+@import '~bulma/sass/elements/form';
+@import '~bulma/sass/elements/other';
 @import "~bulma-timeline";
 
 .navbar {
