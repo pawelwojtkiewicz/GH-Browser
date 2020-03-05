@@ -28,7 +28,7 @@ export default class UserProfile {
                 const convertPullRequestDate = this.modal.convertPullRequestDate;
 
                 this.view.renderUserProfileInormations(userInformations);
-                this.view.renderUserProfileTimeline(userHistory, convertPullRequestDate);
+                this.view.renderUserHistory(userHistory, convertPullRequestDate);
                 this.modal.fetchDataLoader(false);  
             });
     }

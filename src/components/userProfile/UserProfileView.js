@@ -2,12 +2,18 @@ import $ from 'cash-dom';
 
 export default class UserProfileView {
     checkStatus(status){return status === "error"};
+    checkIfIsHistory(body){return body.length !== 0 ? true : false};
     createErrorInformation(textResponse){
         const container = document.createElement('p');
         container.innerText = textResponse;
         return container;
     }
-      
+    createNoHistoryInformation(){
+        const container = document.createElement("p");
+        container.innerText = "No history";
+        return container;
+    }
+
     createUserProfileInormationsContainer(children){
         const container = document.createElement("div");
         container.className = "profile";
@@ -54,17 +60,21 @@ export default class UserProfileView {
         if(isError){
             elementContent = this.createErrorInformation(body.textResponse);
         } else {
-            elementContent = createContent(body);
+            elementContent = this.createUserProfileContent(body);
         }
 
         const elementContainer = this.createUserProfileInormationsContainer(elementContent);
         $('.profile').replaceWith(elementContainer);
     }
 
+    createHistoryContainer(){
+        const container = document.createElement("div");
+        container.className = "timeline";
+        container.id="user-timeline";
+        return container;
+    }
 
-
-
-    createHistoryElementContainer(children, created_at){
+    createHistoryElementContainer(children, created_at, convertPullRequestDate){
         const container = document.createElement("div");
         container.className = "timeline-item";
         container.innerHTML = `
@@ -77,7 +87,8 @@ export default class UserProfileView {
         return container;
     };
 
-    createPullRequestEvent(elementData){
+    createPullRequestEvent(elementData, convertPullRequestDate){
+        
         const {payload, created_at} = elementData.userEvent;
         const createContent = () => (`
             <div class="content">
@@ -100,12 +111,12 @@ export default class UserProfileView {
         `);
 
         const elementContent = createContent();
-        const elementContainer = createHistoryElementContainer(elementContent, created_at);
+        const elementContainer = this.createHistoryElementContainer(elementContent, created_at, convertPullRequestDate);
 
         return elementContainer;
     }
 
-    createPullRequestReviewCommentEvent = elementData => {
+    createPullRequestReviewCommentEvent(elementData, convertPullRequestDate){
         const {payload, created_at} = elementData.userEvent;
         const createContent = () => (`
             <div class="content">
@@ -132,62 +143,45 @@ export default class UserProfileView {
         `);
 
         const elementContent = createContent();
-        const elementContainer = createHistoryElementContainer(elementContent, created_at);
+        const elementContainer = this.createHistoryElementContainer(elementContent, created_at, convertPullRequestDate);
 
         return elementContainer;
     }
 
-    createHistoryElements(body){
-        const checkIfIsHistory = body => body.length !== 0 ? true : false;
-        const createHistory = body => {
-            const PullRequestEvent = "PullRequestEvent";
-            const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
+    createHistoryElements(body, convertPullRequestDate){
+        const PullRequestEvent = "PullRequestEvent";
+        const PullRequestReviewCommentEvent = "PullRequestReviewCommentEvent";
 
-            const fragment = document.createDocumentFragment();
-            body.forEach(elementData => {
-                switch(elementData.type){
-                    case PullRequestEvent: return fragment.appendChild(createPullRequestEvent(elementData));
-                    case PullRequestReviewCommentEvent: return fragment.appendChild(createPullRequestReviewCommentEvent(elementData));
-                    default: return console.log("error");
-                }
-            });
-            return fragment;
-        }
-        const createNoHistoryInformation = () => {
-            const container = document.createElement("p");
-            container.innerText = "No history";
-            return container;
-        }
+        const historyElements = document.createDocumentFragment();
+        body.forEach(elementData => {
+            switch(elementData.type){
+                case PullRequestEvent: return historyElements.appendChild(this.createPullRequestEvent(elementData, convertPullRequestDate));
+                case PullRequestReviewCommentEvent: return historyElements.appendChild(this.createPullRequestReviewCommentEvent(elementData, convertPullRequestDate));
+                default: return console.log("error");
+            }
+        });
+
+       return historyElements;
+    }
+
+    renderUserHistory(userHistory, convertPullRequestDate){
+        const {body} = userHistory;
         
-     
-
-        const container = document.createElement("div");
-        container.className = "timeline";
-        container.id="user-timeline";
-
         const isError = this.checkStatus(body.status);
-        const isHistory = checkIfIsHistory(body);
+        const isHistory = this.checkIfIsHistory(body);
+
         let elementContent;
         if(isError){
             elementContent = this.createErrorInformation(body.textResponse);
         } else if (isHistory) {
-            elementContent = createHistory(body)
+            elementContent = this.createHistoryElements(body, convertPullRequestDate)
         } else if (!isHistory){
-            elementContent = createNoHistoryInformation()
+            elementContent = this.createNoHistoryInformation()
         }
-        
-        container.appendChild(elementContent);
-        return container;
-    }
 
+        const historyContainer = this.createHistoryContainer();
+        historyContainer.appendChild(elementContent);
 
-
-
-
-    renderUserProfileTimeline(userHistory, convertPullRequestDate){
-        const {body} = userHistory;
-
-        const elementsToCreate = createHistoryElements(body);
-        $('#user-timeline').replaceWith(elementsToCreate);
+        $('#user-timeline').replaceWith(historyContainer);
     }
 }
