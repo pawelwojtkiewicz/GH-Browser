@@ -36,7 +36,7 @@ export default class UserProfileModal {
         return `${monthInString} ${day}, ${year}`;
     }
 
-    extractUserEventTypes(userEventHistory, userHistoryEventTypes){
+    _extractUserEventTypes(userEventHistory, userHistoryEventTypes){
         const userHistory = [];
         userHistoryEventTypes.forEach(eventType => {
             userEventHistory.forEach(userEvent => {
@@ -52,7 +52,7 @@ export default class UserProfileModal {
         return userHistory;
     }
 
-    filterPullRequestEventbyActionType(response){
+    _filterPullRequestEventbyActionType(response){
         const pullRequestEvent = "PullRequestEvent";
         const actionTypesOfPullRequestEvent = ["opened", "closed"];
 
@@ -72,9 +72,9 @@ export default class UserProfileModal {
         return filteredUserHistory;
     }
 
-    filterData(body, userHistoryEventTypes){
-        const extractedByUserType = extractUserEventTypes(body, userHistoryEventTypes)
-        const filteredByActionType = filterPullRequestEventbyActionType(extractedByUserType)
+    _filterData(body, userHistoryEventTypes){
+        const extractedByUserType = this._extractUserEventTypes(body, userHistoryEventTypes)
+        const filteredByActionType = this._filterPullRequestEventbyActionType(extractedByUserType)
 
         return filteredByActionType;
     }
@@ -85,7 +85,8 @@ export default class UserProfileModal {
             if(body.status === "error"){
                 return {...response, body};
             } else {
-                const filteredData = filterData(body, userHistoryEventTypes);
+                
+                const filteredData = this._filterData(body, userHistoryEventTypes);
                 return {...response, body: filteredData};
             }
         });
