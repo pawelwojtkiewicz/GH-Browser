@@ -17,15 +17,16 @@ export default class UserProfileView {
     _createUserProfileInormationsContainer(children){
         const container = document.createElement("div");
         container.className = "profile";
-        container.innerHTML = children;
+        container.appendChild(children);
         return container;
     }
 
     _createUserProfileContent(elementData){
         const {login, avatar_url, html_url, bio} = elementData;
-        return  (`
-            <div class="media">
-                <div class="media-left">
+        const container = document.createElement("div");
+        container.className = "media";
+        container.innerHTML = `
+            <div class="media-left">
                     <figure class="image is-64x64">
                         <img src="${avatar_url}" id="profile-image">
                     </figure>
@@ -47,8 +48,8 @@ export default class UserProfileView {
                         </p>
                     </div>
                 </div>
-            </div>
-        `);
+        `;
+        return container;
     }
 
     renderUserProfileInormations(userInformations){
