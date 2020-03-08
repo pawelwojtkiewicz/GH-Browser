@@ -27,6 +27,8 @@ const validateUserName = userName => {
   });
 }
 
+const clearInput = input => input.val("")
+
 export class App {
   initializeApp(){
     $(".load-username").on("click", function() {
@@ -34,6 +36,7 @@ export class App {
       validateUserName(userNameInput.val())
         .then(userName => {
           new UserProfile().render(userName);
+          clearInput(userNameInput);
         })
         .catch(error => {
           console.error(`Error ${error}`);

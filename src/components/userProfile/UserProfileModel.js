@@ -2,7 +2,7 @@ import $ from 'cash-dom';
 import fetchUserInformations from '../../services/fetchUserInformations.js';
 import fetchUserHistory from '../../services/fetchUserHistory.js';
 
-export default class UserProfileModal {
+export default class UserProfileModel {
     fetchDataLoader(status){
         if(status) $('#spinner').removeClass("is-hidden");
         else $('#spinner').addClass("is-hidden");

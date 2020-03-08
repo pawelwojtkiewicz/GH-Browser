@@ -1,9 +1,9 @@
-import UserProfileModal from './UserProfileModal.js';
+import UserProfileModel from './UserProfileModel.js';
 import UserProfileView from './UserProfileView.js';
 
 export default class UserProfile {
     constructor(){
-        this.modal = new UserProfileModal();
+        this.modal = new UserProfileModel();
         this.view = new UserProfileView();
         this.userHistoryEventTypes = ["PullRequestEvent", "PullRequestReviewCommentEvent"];
     }
